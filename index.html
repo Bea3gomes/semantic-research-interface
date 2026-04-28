@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Researcher | Portfolio Build</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>🌸 AI Researcher</h1>
+                <p>Automated Synthesis with Real-Time Global Data</p>
+            </div>
+
+            <div class="search-section">
+                <form id="form-pesquisa">
+                    <input type="text" id="tema" placeholder="What would you like to research?">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+
+            <div id="loading" style="display: none; text-align: center; padding: 60px;">
+                <div class="spinner">🌸</div>
+                <p style="margin-top: 15px; color: #aa7a6e;">
+                    Analyzing sources and generating summary...
+                </p>
+            </div>
+
+            <div id="conteudo-dinamico"></div>
+
+            <div class="footer">
+                Automated Research • Knowledge Discovery • High Efficiency Build
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('form-pesquisa');
+        const conteudoDiv = document.getElementById('conteudo-dinamico');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const tema = document.getElementById('tema').value.trim();
+            if (!tema) return;
+
+            document.getElementById('loading').style.display = 'block';
+            conteudoDiv.innerHTML = '';
+
+            try {
+                const response = await fetch(`http://localhost:5000/pesquisar?tema=${encodeURIComponent(tema)}`);
+                const data = await response.json();
+
+                document.getElementById('loading').style.display = 'none';
+
+                if (data.erro) {
+                    conteudoDiv.innerHTML = `
+                        <div style="padding: 40px; text-align: center;">
+                            ❌ ${data.erro}
+                        </div>
+                    `;
+                    return;
+                }
+
+                conteudoDiv.innerHTML = `
+                    <div class="tema-area-centralizada">
+                        <span class="emoji-header">${data.emoji}</span>
+                        <h2 class="titulo-pesquisa">${data.tema.toUpperCase()}</h2>
+                        <p class="subtitulo-pesquisa">Comprehensive Intelligence Report</p>
+                    </div>
+
+                    <div class="resumo">
+                        <h3>📖 Executive Summary</h3>
+                        <div class="resumo-texto">
+                            ${data.resumo.replace(/\\n/g, "<br>")}
+                        </div>
+                    </div>
+
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-valor">${data.resultados.length}</div>
+                            <div class="stat-label">Sources</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-valor">${data.engine}</div>
+                            <div class="stat-label">Engine</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-valor">${data.execution_time}</div>
+                            <div class="stat-label">Latency</div>
+                        </div>
+                    </div>
+
+                    <div class="grid-cards">
+                        ${data.resultados.map(r => `
+                            <div class="card-referencia">
+                                <div class="titulo">
+                                    <a href="${r.link}" target="_blank">${r.titulo}</a>
+                                </div>
+                                <div class="descricao">
+                                    ${r.descricao.substring(0, 150)}...
+                                </div>
+                                <div class="link">
+                                    ${r.link.substring(0, 35)}...
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+
+            } catch (err) {
+                document.getElementById('loading').style.display = 'none';
+                alert("Erro de conexão. Verifique se o backend está rodando.");
+            }
+        });
+    </script>
+</body>
+</html>

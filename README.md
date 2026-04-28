@@ -3,6 +3,9 @@
 Lightweight research tool that generates structured summaries from a given topic using Wikipedia data and keyword-based semantic mapping.
 
 ---
+## 🖥️ Interface Preview
+
+![Preview](./preview.png)
 
 ## 🚀 OVERVIEW
 

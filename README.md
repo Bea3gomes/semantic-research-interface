@@ -17,6 +17,12 @@ The goal is to provide fast and simplified research support.
 
 ---
 
+## 🌐 Live Demo
+
+👉 https://bea3gomes.github.io/semantic-research-interface/
+
+---
+
 ## ⚙️ HOW IT WORKS
 
 1. The user enters a topic
